@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reaction Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            color: #666;
+        }
+
+        #timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .shape {
+            width: 100px;
+            height: 100px;
+            position: absolute;
+        }
+
+        .box {
+            background-color: #3498db;
+        }
+
+        .circle {
+            background-color: #e67e22;
+            border-radius: 50%;
+        }
+
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+            border-bottom: 100px solid #9b59b6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Your Reactions!</h1>
+    <p>Click on the shapes as quickly as you can!</p>
+    <p>Your time: <span id="timer">0</span></p>
+
+    <script>
+        var startTime;
+
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function makeShapeAppear() {
+            var shape = document.createElement("div");
+            shape.className = "shape";
+            var top = Math.random() * 400;
+            var left = Math.random() * 800;
+            var size = Math.random() * 200 + 100;
+            var shapeType = Math.floor(Math.random() * 3); // 0: box, 1: circle, 2: triangle
+            var bgColor = getRandomColor();
+
+            shape.style.top = top + "px";
+            shape.style.left = left + "px";
+            shape.style.width = size + "px";
+            shape.style.height = size + "px";
+            shape.style.backgroundColor = bgColor;
+            shape.style.cursor = "pointer";
+
+            if (shapeType === 0) {
+                shape.className += " box";
+            } else if (shapeType === 1) {
+                shape.className += " circle";
+            } else {
+                shape.className += " triangle";
+            }
+
+            shape.onclick = function() {
+                var endTime = new Date().getTime();
+                var reactionTime = (endTime - startTime) / 1000;
+                document.getElementById("timer").innerHTML = reactionTime.toFixed(2) + "s";
+                shape.style.display = "none";
+                setTimeout(makeShapeAppear, Math.random() * 2000);
+            }
+
+            startTime = new Date().getTime();
+            document.body.appendChild(shape);
+        }
+
+        setTimeout(makeShapeAppear, Math.random() * 2000);
+    </script>
+</body>
+</html>
